@@ -21,7 +21,7 @@ pip install starlight-vision
 
 ## 🎬 Quick Start
 
-After installing Starlight Vision, you can start generating videos using the following code:
+After we train you can install Starlight Vision and can start generating videos using the following code:
 
 ```python
 from starlight_vision import StarlightVision

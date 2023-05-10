@@ -104,6 +104,11 @@ The following roadmap outlines our plans for future development and enhancements
 - [ ] Investigate methods for training Starlight Vision on custom datasets to generate domain-specific videos
 - [ ] Foster a community of researchers, developers, and artists to collaborate on the continued development and exploration of Starlight Vision's capabilities
 
+# Join Agora
+Agora is advancing Humanity with State of The Art AI Models like Starlight, join us and write your mark on the history books for eternity!
+
+https://discord.gg/sbYvXgqc
+
 
 
 ## 🙌 Acknowledgments

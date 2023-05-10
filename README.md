@@ -75,6 +75,37 @@ We welcome contributions from the community! If you'd like to contribute, please
 
 Starlight Vision is released under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
+## 🗺️ Roadmap
+
+The following roadmap outlines our plans for future development and enhancements to Starlight Vision. We aim to achieve these milestones through a combination of research, development, and collaboration with the community.
+
+### 🚀 Short-term Goals
+
+- [ ] Improve text-to-video synthesis by incorporating advanced natural language understanding techniques
+- [ ] Train on LAION-5B and video datasets
+- [ ] Enhance the quality of generated videos through the implementation of state-of-the-art generative models
+- [ ] Optimize the model for real-time video generation on various devices, including mobile phones and edge devices
+- [ ] Develop a user-friendly web application that allows users to generate videos using Starlight Vision without any programming knowledge
+- [ ] Create comprehensive documentation and tutorials to help users get started with Starlight Vision
+
+### 🌌 Medium-term Goals
+
+- [ ] Integrate advanced style transfer techniques to allow users to customize the visual style of generated videos
+- [ ] Develop a plugin for popular video editing software (e.g., Adobe Premiere, Final Cut Pro) that enables users to utilize Starlight Vision within their existing workflows
+- [ ] Enhance the model's ability to generate videos with multiple scenes and complex narratives
+- [ ] Improve the model's understanding of object interactions and physics to generate more realistic videos
+- [ ] Expand the supported input formats to include audio, 3D models, and other media types
+
+### 🌠 Long-term Goals
+
+- [ ] Enable users to control the generated video with more granular parameters, such as lighting, camera angles, and object placement
+- [ ] Incorporate AI-driven video editing capabilities that automatically adjust the pacing, color grading, and transitions based on user preferences
+- [ ] Develop an API for real-time video generation that can be integrated into virtual reality, augmented reality, and gaming applications
+- [ ] Investigate methods for training Starlight Vision on custom datasets to generate domain-specific videos
+- [ ] Foster a community of researchers, developers, and artists to collaborate on the continued development and exploration of Starlight Vision's capabilities
+
+
+
 ## 🙌 Acknowledgments
 
 This project is inspired by state-of-the-art research in video synthesis, such as the Structure and Content-Guided Video Synthesis with Diffusion Models paper, and leverages the power of deep learning frameworks like PyTorch.

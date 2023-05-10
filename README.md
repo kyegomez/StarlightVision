@@ -1,5 +1,6 @@
 # 🌌 Starlight Vision 🚀
 
+![Starlight](starlight.png)
 🪐 Starlight Vision is a powerful multi-modal AI model designed to generate high-quality novel videos using text, images, or video clips as input. By leveraging state-of-the-art deep learning techniques, it can synthesize realistic and visually impressive video content that can be used in a variety of applications, such as movie production, advertising, virtual reality, and more. 🎥
 
 ## 🌟 Features

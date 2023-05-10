@@ -73,7 +73,7 @@ We welcome contributions from the community! If you'd like to contribute, please
 
 ## 📄 License
 
-Starlight Vision is released under the MIT License. See the [LICENSE](LICENSE) file for more details.
+Starlight Vision is released under the APACHE License. See the [LICENSE](LICENSE) file for more details.
 
 ## 🗺️ Roadmap
 

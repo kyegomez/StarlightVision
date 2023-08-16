@@ -1,4 +1,3 @@
-import torch
 from starlight_vision import Unet3D, ElucidatedStarlight, StarlightTrainer
 
 class Starlight:

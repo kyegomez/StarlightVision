@@ -55,17 +55,3 @@ class Starlight:
     def sample(self, texts, video_frames=20):
         return self.trainer.sample(texts=texts, video_frames=video_frames)
 
-# Example of usage:
-model = Starlight()
-
-texts = [
-    'a whale breaching from afar',
-    'young girl blowing out candles on her birthday cake',
-    'fireworks with blue and green sparkles',
-    'dust motes swirling in the morning sunshine on the windowsill'
-]
-
-videos = torch.randn(4, 3, 10, 32, 32).cuda()
-
-model.train(videos, texts=texts)
-sampled_videos = model.sample(texts=texts, video_frames=20)

@@ -27,42 +27,57 @@ pip install starlight-vision
 After we train you can install Starlight Vision and can start generating videos using the following code:
 
 ```python
-from starlight_vision import StarlightVision
+import torch
+from starlight_vision import Unet3D, ElucidatedStarlight, StarlightTrainer
 
-# Initialize the model
-model = StarlightVision()
+unet1 = Unet3D(dim = 64, dim_mults = (1, 2, 4, 8)).cuda()
 
-# Generate a video from a text description
-video = model.generate_video_from_text("A flock of birds flying over a beautiful lake during sunset.")
+unet2 = Unet3D(dim = 64, dim_mults = (1, 2, 4, 8)).cuda()
 
-# Save the generated video
-video.save("output.mp4")
-```
+# elucidated starlight, which contains the unets above (base unet and super resoluting ones)
 
-## 🛠 Usage
+starlight = ElucidatedStarlight(
+    unets = (unet1, unet2),
+    image_sizes = (16, 32),
+    random_crop_sizes = (None, 16),
+    temporal_downsample_factor = (2, 1),        # in this example, the first unet would receive the video temporally downsampled by 2x
+    num_sample_steps = 10,
+    cond_drop_prob = 0.1,
+    sigma_min = 0.002,                          # min noise level
+    sigma_max = (80, 160),                      # max noise level, double the max noise level for upsampler
+    sigma_data = 0.5,                           # standard deviation of data distribution
+    rho = 7,                                    # controls the sampling schedule
+    P_mean = -1.2,                              # mean of log-normal distribution from which noise is drawn for training
+    P_std = 1.2,                                # standard deviation of log-normal distribution from which noise is drawn for training
+    S_churn = 80,                               # parameters for stochastic sampling - depends on dataset, Table 5 in apper
+    S_tmin = 0.05,
+    S_tmax = 50,
+    S_noise = 1.003,
+).cuda()
 
-### 📄 Generating Videos from Text
+texts = [
+    'a whale breaching from afar',
+    'young girl blowing out candles on her birthday cake',
+    'fireworks with blue and green sparkles',
+    'dust motes swirling in the morning sunshine on the windowsill'
+]
 
-```python
-video = model.generate_video_from_text("A person riding a bike in a park.", duration=10, resolution=(1280, 720))
-```
+videos = torch.randn(4, 3, 10, 32, 32).cuda() # (batch, channels, time / video frames, height, width)
 
-### 🖼 Generating Videos from Images
+# feed images into starlight, training each unet in the cascade
+# for this example, only training unet 1
 
-```python
-from PIL import Image
+trainer = StarlightTrainer(starlight)
 
-input_image = Image.open("example_image.jpg")
-video = model.generate_video_from_image(input_image, duration=5, resolution=(1280, 720))
-```
+# you can also ignore time when training on video initially, shown to improve results in video-ddpm paper. eventually will make the 3d unet trainable with either images or video. research shows it is essential (with current data regimes) to train first on text-to-image. probably won't be true in another decade. all big data becomes small data
 
-### 🎞 Generating Videos from Video Clips
+trainer(videos, texts = texts, unet_number = 1, ignore_time = False)
+trainer.update(unet_number = 1)
 
-```python
-from moviepy.editor import VideoFileClip
+videos = trainer.sample(texts = texts, video_frames = 20) # extrapolating to 20 frames from training on 10 frames
 
-input_clip = VideoFileClip("example_clip.mp4")
-video = model.generate_video_from_clip(input_clip, duration=10, resolution=(1280, 720))
+videos.shape # (4, 3, 20, 32, 32)
+
 ```
 
 ## 🤝 Contributing

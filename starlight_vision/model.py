@@ -1,30 +1,62 @@
 import torch
 from starlight_vision import Unet3D, ElucidatedStarlight, StarlightTrainer
-unet1 = Unet3D(dim = 64, dim_mults = (1, 2, 4, 8)).cuda()
-unet2 = Unet3D(dim = 64, dim_mults = (1, 2, 4, 8)).cuda()
 
-# elucidated starlight, which contains the unets above (base unet and super resoluting ones)
+class Starlight:
+    def __init__(self, 
+                 dim=64, 
+                 dim_mults=(1, 2, 4, 8), 
+                 image_sizes=(16, 32),
+                 random_crop_sizes=(None, 16),
+                 temporal_downsample_factor=(2, 1),
+                 num_sample_steps=10,
+                 cond_drop_prob=0.1,
+                 sigma_min=0.002,
+                 sigma_max=(80, 160),
+                 sigma_data=0.5,
+                 rho=7,
+                 P_mean=-1.2,
+                 P_std=1.2,
+                 S_churn=80,
+                 S_tmin=0.05,
+                 S_tmax=50,
+                 S_noise=1.003):
 
-starlight = ElucidatedStarlight(
-    unets = (unet1, unet2),
-    image_sizes = (16, 32),
-    random_crop_sizes = (None, 16),
-    temporal_downsample_factor = (2, 1),        # in this example, the first unet would receive the video temporally downsampled by 2x
-    num_sample_steps = 10,
-    cond_drop_prob = 0.1,
-    sigma_min = 0.002,                          # min noise level
-    sigma_max = (80, 160),                      # max noise level, double the max noise level for upsampler
-    sigma_data = 0.5,                           # standard deviation of data distribution
-    rho = 7,                                    # controls the sampling schedule
-    P_mean = -1.2,                              # mean of log-normal distribution from which noise is drawn for training
-    P_std = 1.2,                                # standard deviation of log-normal distribution from which noise is drawn for training
-    S_churn = 80,                               # parameters for stochastic sampling - depends on dataset, Table 5 in apper
-    S_tmin = 0.05,
-    S_tmax = 50,
-    S_noise = 1.003,
-).cuda()
+        # Initialize the Unet models
+        self.unet1 = Unet3D(dim=dim, dim_mults=dim_mults).cuda()
+        self.unet2 = Unet3D(dim=dim, dim_mults=dim_mults).cuda()
 
-# mock videos (get a lot of this) and text encodings from large T5
+        # Initialize the Starlight model
+        self.starlight = ElucidatedStarlight(
+            unets=(self.unet1, self.unet2),
+            image_sizes=image_sizes,
+            random_crop_sizes=random_crop_sizes,
+            temporal_downsample_factor=temporal_downsample_factor,
+            num_sample_steps=num_sample_steps,
+            cond_drop_prob=cond_drop_prob,
+            sigma_min=sigma_min,
+            sigma_max=sigma_max,
+            sigma_data=sigma_data,
+            rho=rho,
+            P_mean=P_mean,
+            P_std=P_std,
+            S_churn=S_churn,
+            S_tmin=S_tmin,
+            S_tmax=S_tmax,
+            S_noise=S_noise,
+        ).cuda()
+
+        # Initialize the trainer
+        self.trainer = StarlightTrainer(self.starlight)
+
+    def train(self, videos, texts, unet_number=1, ignore_time=False):
+        self.trainer(videos, texts=texts, unet_number=unet_number, ignore_time=ignore_time)
+        self.trainer.update(unet_number=unet_number)
+
+    def sample(self, texts, video_frames=20):
+        return self.trainer.sample(texts=texts, video_frames=video_frames)
+
+# Example of usage:
+model = Starlight()
 
 texts = [
     'a whale breaching from afar',
@@ -33,18 +65,7 @@ texts = [
     'dust motes swirling in the morning sunshine on the windowsill'
 ]
 
-videos = torch.randn(4, 3, 10, 32, 32).cuda() # (batch, channels, time / video frames, height, width)
+videos = torch.randn(4, 3, 10, 32, 32).cuda()
 
-# feed images into starlight, training each unet in the cascade
-# for this example, only training unet 1
-
-trainer = StarlightTrainer(starlight)
-
-# you can also ignore time when training on video initially, shown to improve results in video-ddpm paper. eventually will make the 3d unet trainable with either images or video. research shows it is essential (with current data regimes) to train first on text-to-image. probably won't be true in another decade. all big data becomes small data
-
-trainer(videos, texts = texts, unet_number = 1, ignore_time = False)
-trainer.update(unet_number = 1)
-
-videos = trainer.sample(texts = texts, video_frames = 20) # extrapolating to 20 frames from training on 10 frames
-
-videos.shape # (4, 3, 20, 32, 32)
+model.train(videos, texts=texts)
+sampled_videos = model.sample(texts=texts, video_frames=20)

@@ -1,5 +1,5 @@
 import torch
-from starlight import Unet3D, ElucidatedStarlight, StarlightTrainer
+from starlight_vision import Unet3D, ElucidatedStarlight, StarlightTrainer
 
 unet1 = Unet3D(dim = 64, dim_mults = (1, 2, 4, 8)).cuda()
 

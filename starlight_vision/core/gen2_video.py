@@ -17,7 +17,7 @@ from einops import rearrange, repeat, reduce, pack, unpack
 from einops.layers.torch import Rearrange, Reduce
 from einops_exts.torch import EinopsToAndFrom
 
-from starlight.t5 import t5_encode_text, get_encoded_dim, DEFAULT_T5_NAME
+from starlight_vision.t5 import t5_encode_text, get_encoded_dim, DEFAULT_T5_NAME
 
 # helper functions
 

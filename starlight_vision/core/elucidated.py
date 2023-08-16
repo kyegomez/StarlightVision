@@ -17,7 +17,7 @@ import kornia.augmentation as K
 
 from einops import rearrange, repeat, reduce
 
-from starlight.core.gen2 import (
+from starlight_vision.core.gen2 import (
     GaussianDiffusionContinuousTimes,
     Unet,
     NullUnet,
@@ -41,13 +41,13 @@ from starlight.core.gen2 import (
     maybe_transform_dict_key
 )
 
-from starlight.core.gen2_video import (
+from starlight_vision.core.gen2_video import (
     Unet3D,
     resize_video_to,
     scale_video_time
 )
 
-from starlight.core.t5 import t5_encode_text, get_encoded_dim, DEFAULT_T5_NAME
+from starlight_vision.core.t5 import t5_encode_text, get_encoded_dim, DEFAULT_T5_NAME
 
 # constants
 

@@ -22,9 +22,9 @@ import kornia.augmentation as K
 from einops import rearrange, repeat, reduce, pack, unpack
 from einops.layers.torch import Rearrange, Reduce
 
-from starlight.core.t5 import t5_encode_text, get_encoded_dim, DEFAULT_T5_NAME
+from starlight_vision.core.t5 import t5_encode_text, get_encoded_dim, DEFAULT_T5_NAME
 
-from starlight.core.gen2_video import Unet3D, resize_video_to, scale_video_time
+from starlight_vision.core.gen2_video import Unet3D, resize_video_to, scale_video_time
 
 # helper functions
 

@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "starlight_vision"
+version = "0.1.0"  # This is a placeholder. Replace with the actual value of __version__ from 'starlight/version.py'.
+description = "Starlight - unprecedented photorealism × deep level of language understanding"
+authors = ["Kye Gomez <kye@apac.ai>"]
+license = "MIT"
+homepage = "https://github.com/kyegomez/StarlightVision"
+readme = "README.md"  # This is an assumption, adjust as necessary.
+keywords = ["artificial intelligence", "deep learning", "transformers", "text-to-image", "denoising-diffusion"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.6",
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+accelerate = "*"
+beartype = "*"
+click = "*"
+datasets = "*"
+einops = ">=0.6.1"
+ema-pytorch = ">=0.0.3"
+fsspec = "*"
+kornia = "*"
+lion-pytorch = "*"
+numpy = "*"
+packaging = "*"
+pillow = "*"
+pydantic = ">=2"
+pytorch-lightning = "*"
+pytorch-warmup = "*"
+sentencepiece = "*"
+torch = ">=1.6"
+torchvision = "*"
+transformers = "*"
+triton = "*"
+tqdm = "*"

@@ -18,11 +18,11 @@ from torch.cuda.amp import autocast, GradScaler
 
 import pytorch_warmup as warmup
 
-from starlight.core.starlight.core import starlight, NullUnet
-from starlight.core.elucidated import ElucidatedStarlight
-from starlight.core.data import cycle
+from starlight_vision.core.starlight.core import starlight, NullUnet
+from starlight_vision.core.elucidated import ElucidatedStarlight
+from starlight_vision.core.data import cycle
 
-from starlight.core.version import __version__
+from starlight_vision.core.version import __version__
 from packaging import version
 
 import numpy as np

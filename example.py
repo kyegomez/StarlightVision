@@ -26,8 +26,6 @@ starlight = ElucidatedStarlight(
     S_noise = 1.003,
 ).cuda()
 
-# mock videos (get a lot of this) and text encodings from large T5
-
 texts = [
     'a whale breaching from afar',
     'young girl blowing out candles on her birthday cake',

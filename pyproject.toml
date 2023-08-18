@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "starlight_vision"
-version = "0.1.0"  # This is a placeholder. Replace with the actual value of __version__ from 'starlight/version.py'.
+version = "0.1.1"  # This is a placeholder. Replace with the actual value of __version__ from 'starlight/version.py'.
 description = "Starlight - unprecedented photorealism × deep level of language understanding"
 authors = ["Kye Gomez <kye@apac.ai>"]
 license = "MIT"

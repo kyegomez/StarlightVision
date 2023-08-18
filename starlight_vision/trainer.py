@@ -1,38 +1,29 @@
 import os
-import time
-import copy
-from pathlib import Path
-from math import ceil
+from collections.abc import Iterable
 from contextlib import contextmanager, nullcontext
 from functools import partial, wraps
-from collections.abc import Iterable
-
-import torch
-from torch import nn
-import torch.nn.functional as F
-from torch.utils.data import random_split, DataLoader
-from torch.optim import Adam
-from lion_pytorch import Lion
-from torch.optim.lr_scheduler import CosineAnnealingLR, LambdaLR
-from torch.cuda.amp import autocast, GradScaler
-
-import pytorch_warmup as warmup
-
-from starlight_vision.core.starlight.core import starlight, NullUnet
-from starlight_vision.core.elucidated import ElucidatedStarlight
-from starlight_vision.core.data import cycle
-
-from starlight_vision.core.version import __version__
-from packaging import version
+from math import ceil
 
 import numpy as np
-
+import pytorch_warmup as warmup
+import torch
+import torch.nn.functional as F
+from accelerate import Accelerator, DistributedDataParallelKwargs, DistributedType
 from ema_pytorch import EMA
-
-from accelerate import Accelerator, DistributedType, DistributedDataParallelKwargs
-
 from fsspec.core import url_to_fs
 from fsspec.implementations.local import LocalFileSystem
+from lion_pytorch import Lion
+from packaging import version
+from torch import nn
+from torch.cuda.amp import GradScaler
+from torch.optim import Adam
+from torch.optim.lr_scheduler import CosineAnnealingLR, LambdaLR
+from torch.utils.data import DataLoader, random_split
+
+from starlight_vision.core.data import cycle
+from starlight_vision.core.elucidated import ElucidatedStarlight
+from starlight_vision.core.starlight.core import NullUnet
+from starlight_vision.core.version import __version__
 
 # helper functions
 
@@ -89,7 +80,7 @@ def num_to_groups(num, divisor):
 
 # url to fs, bucket, path - for checkpointing to cloud
 
-def url_to_bucket(url):
+def url_to_bucket(url, prefix):
     if '://' not in url:
         return url
 
@@ -414,7 +405,7 @@ class StarlightTrainer(nn.Module):
 
 
     def prepare(self):
-        assert not self.prepared, f'The trainer is allready prepared'
+        assert not self.prepared, 'The trainer is allready prepared'
         self.validate_and_set_unet_being_trained(self.only_train_unet_number)
         self.prepared = True
     # computed values
@@ -546,7 +537,7 @@ class StarlightTrainer(nn.Module):
             return
 
         assert not exists(self.train_dl), 'training dataloader was already added'
-        assert not self.prepared, f'You need to add the dataset before preperation'
+        assert not self.prepared, 'You need to add the dataset before preperation'
         self.train_dl = dl
 
     def add_valid_dataloader(self, dl):
@@ -554,7 +545,7 @@ class StarlightTrainer(nn.Module):
             return
 
         assert not exists(self.valid_dl), 'validation dataloader was already added'
-        assert not self.prepared, f'You need to add the dataset before preperation'
+        assert not self.prepared, 'You need to add the dataset before preperation'
         self.valid_dl = dl
 
     def add_train_dataset(self, ds = None, *, batch_size, **dl_kwargs):
@@ -911,7 +902,7 @@ class StarlightTrainer(nn.Module):
         unet = self.unet_being_trained
 
         optimizer = getattr(self, f'optim{index}')
-        scaler = getattr(self, f'scaler{index}')
+        getattr(self, f'scaler{index}')
         scheduler = getattr(self, f'scheduler{index}')
         warmup_scheduler = getattr(self, f'warmup{index}')
 
